@@ -12,6 +12,9 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import com.example.demo.domain.User;
 import com.example.demo.dto.UserDTO;
 import com.example.demo.service.UserService;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.PathVariable;
 
 @RestController
 @RequestMapping(value = "/users")
@@ -44,6 +47,14 @@ public class UserResource {
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Void> delete(@PathVariable String id) {
 		userService.delete(id);
+		return ResponseEntity.noContent().build();
+	}
+
+	@PutMapping("/{id}")
+	public ResponseEntity<Void> update(@RequestBody UserDTO objDto, @PathVariable String id) {
+		User obj = userService.fromDTO(objDto);
+		obj.setId(id);
+		obj = userService.update(obj);
 		return ResponseEntity.noContent().build();
 	}
 }
